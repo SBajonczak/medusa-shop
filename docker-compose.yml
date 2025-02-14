@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # postgres:
+  #   container_name: postgres
+  #   restart: always
+  #   image: postgres:latest
+  #   volumes:
+  #     - ./database:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     POSTGRES_USER: yourusername
+  #     POSTGRES_PASSWORD: yourpassword
+  #     POSTGRES_DB: yourdatabase
+  backend:
+    container_name: backend
+    image: beejay/my-medusa-backend:latest
+#my-medusa-backend:latest
+    restart: always
+    network_mode: bridge
+#    build: ./my-h-bees
+    # volumes:
+    #   - ./my-h-bees:/app
+    environment:
+      - DATABASE_URL=postgres://postgres:supersecret@172.17.0.2/medusa-my-h-bees1
+    ports:
+      - "9000:9000"
+  store:
+    container_name: frontend
+    image: my-medusa-frontend:latest
+    restart: always
+    network_mode: bridge
+    environment:
+      - MEDUSA_BACKEND_URL=http://backend:9000
+      - BACKEND_URL=http://localhost:9000
+#    build: ./my-h-bees
+    # volumes:
+    #   - ./my-h-bees-storefront:/app
+    ports:
+      - "8000:8000"
