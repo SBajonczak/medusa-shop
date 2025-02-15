@@ -46,27 +46,19 @@ jobs:
     - name: Build Backend
       working-directory: my-h-bees
       run: |
+        cd my-h-bees
         npm install
         npm run build --if-present
 
     - name: Upload medusa admin
       uses: actions/upload-artifact@v4
       with:
-        name: node-app
-        path: ./my-h-bees/.medusa
 
-    - name: Upload node modules
-      uses: actions/upload-artifact@v4
-      with:
-        name: node-app
-        path: ./my-h-bees/node_modules
+        path: |
+          ./my-h-bees/.medusa
+          ./my-h-bees/node_modules
+          ./my-h-bees/medusa-config.js
 
-
-    - name: Upload medusa config
-      uses: actions/upload-artifact@v4
-      with:
-        name: node-app
-        path: ./my-h-bees/medusa-config.js
 
   deploy:
     permissions:
