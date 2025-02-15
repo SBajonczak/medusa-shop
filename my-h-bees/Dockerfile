@@ -18,7 +18,7 @@ RUN npm i @rollup/rollup-linux-x64-musl
 # Rebuild the source code only when needed
 FROM base AS builder
 
-ENV NODE_ENV production
+#ENV NODE_ENV production
 
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
@@ -31,8 +31,8 @@ FROM base AS runner
 
 # Setting NODE_ENV=production requires secure cookie (https only access)
 #ENV NODE_ENV=production
-ENV PORT 8080
-ENV HOST 0.0.0.0
+ENV PORT=8080
+ENV HOST=0.0.0.0
 
 # Copy config file
 COPY ./medusa-config.js ./
