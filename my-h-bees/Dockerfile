@@ -27,7 +27,7 @@ RUN npm run build
 
 
 # Final stage for app image
-FROM base as runner
+FROM base AS runner
 
 # Setting NODE_ENV=production requires secure cookie (https only access)
 ENV NODE_ENV production
