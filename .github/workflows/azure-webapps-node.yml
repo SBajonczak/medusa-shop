@@ -43,17 +43,33 @@ jobs:
 #        cache: 'npm'
         
 
-    - name: npm install, build, and test
+    - name: Build Backend
       working-directory: my-h-bees
       run: |
         npm install
         npm run build --if-present
 
-    - name: Upload artifact for deployment job
+    - name: Upload medusa admin
       uses: actions/upload-artifact@v4
+      working-directory: my-h-bees
       with:
         name: node-app
-        path: .
+        path: ./.medusa
+
+    - name: Upload node modules
+      uses: actions/upload-artifact@v4
+      working-directory: my-h-bees
+      with:
+        name: node-app
+        path: ./node_modules
+
+
+    - name: Upload medusa config
+      uses: actions/upload-artifact@v4
+      working-directory: my-h-bees
+      with:
+        name: node-app
+        path: ./medusa-config.js
 
   deploy:
     permissions:
