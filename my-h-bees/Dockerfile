@@ -12,7 +12,7 @@ FROM base AS deps
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-RUN npm ci
+#RUN npm ci
 RUN npm i @rollup/rollup-linux-x64-musl
 
 # Rebuild the source code only when needed
