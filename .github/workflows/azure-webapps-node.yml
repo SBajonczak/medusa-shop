@@ -23,7 +23,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: your-app-name    # set this to your application's name
+  AZURE_WEBAPP_NAME: med-shop-back   # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '20.x'                # set this to the node version to use
 
@@ -51,25 +51,22 @@ jobs:
 
     - name: Upload medusa admin
       uses: actions/upload-artifact@v4
-      working-directory: my-h-bees
       with:
         name: node-app
-        path: ./.medusa
+        path: ./my-h-bees/.medusa
 
     - name: Upload node modules
       uses: actions/upload-artifact@v4
-      working-directory: my-h-bees
       with:
         name: node-app
-        path: ./node_modules
+        path: ./my-h-bees/node_modules
 
 
     - name: Upload medusa config
       uses: actions/upload-artifact@v4
-      working-directory: my-h-bees
       with:
         name: node-app
-        path: ./medusa-config.js
+        path: ./my-h-bees/medusa-config.js
 
   deploy:
     permissions:
