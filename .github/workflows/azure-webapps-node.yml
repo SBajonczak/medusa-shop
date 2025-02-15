@@ -52,11 +52,13 @@ jobs:
     - name: Upload medusa admin
       uses: actions/upload-artifact@v4
       with:
-
+        name: admin
         path: |
           ./my-h-bees/.medusa
           ./my-h-bees/node_modules
           ./my-h-bees/medusa-config.js
+
+
 
 
   deploy:
@@ -72,7 +74,7 @@ jobs:
     - name: Download artifact from build job
       uses: actions/download-artifact@v4
       with:
-        name: node-app
+        name: admin
 
     - name: 'Deploy to Azure WebApp'
       id: deploy-to-webapp
