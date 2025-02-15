@@ -41,17 +41,11 @@ COPY ./medusa-config.js ./
 #COPY --from=builder /usr/src/app/package.json ./package.json
 #COPY ./instrumentation.ts .
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-#COPY --from=builder /usr/src/app/ ./
-#COPY --from=builder /usr/src/app/.medusa/server/public/ ./public
-#COPY --from=builder /usr/src/app/ ./.medusa
-#COPY --from=builder /usr/src/app/.medusa/server/instrumentation.js ./
-#COPY --from=builder /usr/src/app/.medusa/server/public/admin ./
-COPY ./.medusa .
-COPY ./.medusa/server/public ./public
-COPY ./package.json .
-COPY ./tsconfig.json .
-COPY ./medusa-config.js .
-COPY ./.env .
+COPY --from=builder /usr/src/app/.medusa/server/public .
+COPY --from=builder /usr/src/app/.medusa .
+COPY  ./medusa-config.js .
+COPY  ./package.json .
+
 
 # Run application
 EXPOSE 9000
