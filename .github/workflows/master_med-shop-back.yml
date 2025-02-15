@@ -47,9 +47,6 @@ jobs:
         run: cp ./my-h-bees/package.json ./dist
 
 
-      - name: Zip artifact for deployment
-        working-directory: ./dist        
-        run: zip release.zip . -r
         
 
       - name: Upload artifact for deployment job
