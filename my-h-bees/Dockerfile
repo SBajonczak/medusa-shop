@@ -30,8 +30,8 @@ RUN npm run build
 FROM base AS runner
 
 # Setting NODE_ENV=production requires secure cookie (https only access)
-ENV NODE_ENV production
-ENV PORT 9000
+#ENV NODE_ENV=production
+ENV PORT 8080
 ENV HOST 0.0.0.0
 
 # Copy config file
