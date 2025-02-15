@@ -41,13 +41,14 @@ jobs:
 
       
       - name: Copy config into root
-        run: cp ./my-h-bees/medusa-config.js ./my-h-bees
+        run: cp ./my-h-bees/medusa-config.js ./dist
 
       - name: Copy package json
+        run: cp ./my-h-bees/package.json ./dist
 
 
       - name: Zip artifact for deployment
-        working-directory: ./dist
+        working-directory: ./dist        
         run: zip release.zip . -r
         
 
