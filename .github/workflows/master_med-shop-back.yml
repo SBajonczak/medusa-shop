@@ -3,10 +3,10 @@
 
 name: Build and deploy Node.js app to Azure Web App - med-shop-back
 
-on:
-  push:
-    branches:
-      - master
+#on:
+#  push:
+#    branches:
+#      - master
   workflow_dispatch:
 
 jobs:
