@@ -25,6 +25,7 @@ services:
     environment:    
       - DATABASE_URL=postgres://pgbajonczak:n4@NMvumg-dTNop@postgrbajonczak.postgres.database.azure.com/postgres?sslmode=require
       - MEDUSA_ADMIN_ONBOARDING_TYPE=nextjs
+      - ALLOWED_HOSTS=http://localhost:5173,http://localhost:8080,https://docs.medusajs.com,http://shop.myhealthybees.com
       - STORE_CORS=http://localhost:8000,https://docs.medusajs.com,http://shop.myhealthybees.com
       - ADMIN_CORS=http://localhost:5173,http://localhost:8080,https://docs.medusajs.com,http://shop.myhealthybees.com
       - AUTH_CORS=http://localhost:5173,http://localhost:8080,http://shop.myhealthybees.com,http://localhost:8000,https://docs.medusajs.com

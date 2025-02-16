@@ -8,7 +8,7 @@ module.exports = defineConfig({
   admin: {
     disable: false,
     vite: config => {
-      config.server.allowedHosts = ['YOUR-DOMAIN']
+      config.server.allowedHosts = process.env.ALLOWED_HOSTS?.split(',') || ['shop.myhealthybees.com']
       return config
     }
   },
