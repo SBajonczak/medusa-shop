@@ -32,7 +32,7 @@ services:
       - MEDUSA_ADMIN_ONBOARDING_NEXTJS_DIRECTORY=my-h-bees-storefront
       - DB_NAME=medusa-my-h-bees
     ports:
-      - "8080:8080"
+      - "8081:8080"
     depends_on:
       - redis
   redis:
@@ -44,7 +44,8 @@ services:
       - "6379:6379"
   store:
     container_name: frontend
-    image: my-medusa-frontend:latest
+#    image: my-medusa-frontend:latest
+    image: shop
     restart: always
     network_mode: bridge
     environment:
@@ -78,4 +79,5 @@ services:
     # volumes:
     #   - ./my-h-bees-storefront:/app
     ports:
+
       - "8080:8080"
