@@ -21,9 +21,9 @@ FROM base AS builder
 #ENV NODE_ENV production
 
 COPY --from=deps /usr/src/app/node_modules ./node_modules
-COPY . .
-RUN npm i
-RUN npm run build 
+# COPY . .
+# RUN npm i
+# RUN npm run build 
 
 
 # Final stage for app image
@@ -41,12 +41,19 @@ COPY ./medusa-config.js ./
 #COPY --from=builder /usr/src/app/package.json ./package.json
 #COPY ./instrumentation.ts .
 COPY --from=builder /usr/src/app/node_modules ./node_modules
+
+COPY . .
+RUN npm i
+RUN npm run build 
+
 #COPY --from=builder /usr/src/app/.medusa/server/public .
-COPY --from=builder /usr/src/app/.medusa .
+COPY --from=builder /usr/src/app .
 COPY  ./medusa-config.js .
 COPY  ./package.json .
 
-RUN ln -s ./.medusa/server/public /public
+RUN rm .env
+
+RUN ln -s ./.medusa/server/public public
 # Run application
 EXPOSE 9000
 CMD ["npm", "run", "start"]
