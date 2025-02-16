@@ -13,12 +13,12 @@
     "medusa"
   ],
   "scripts": {
-    "start": "cross-env NODE_ENV=development && medusa start",
+    "start": "medusa start -p 8080 -H 0.0.0.0",
     "migrate": "medusa migrations run",
     "build": "set NODE_ENV=development && medusa build ",
     "build:admin": "medusa build --admin-only",
     "seed": "medusa exec ./src/scripts/seed.ts",
-    "dev": "medusa develop",
+    "dev": "medusa develop -p 8080",
     "test:integration:http": "TEST_TYPE=integration:http NODE_OPTIONS=--experimental-vm-modules jest --silent=false --runInBand --forceExit",
     "test:integration:modules": "TEST_TYPE=integration:modules NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit",
     "test:unit": "TEST_TYPE=unit NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit"

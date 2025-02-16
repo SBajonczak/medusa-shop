@@ -12,17 +12,17 @@ FROM base AS deps
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-RUN npm ci
+#RUN npm ci
 RUN npm i @rollup/rollup-linux-x64-musl
 
 # Rebuild the source code only when needed
 FROM base AS builder
 
-ENV NODE_ENV production
+#ENV NODE_ENV production
 
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
-
+RUN npm i
 RUN npm run build 
 
 
@@ -30,9 +30,9 @@ RUN npm run build
 FROM base AS runner
 
 # Setting NODE_ENV=production requires secure cookie (https only access)
-ENV NODE_ENV production
-ENV PORT 9000
-ENV HOST 0.0.0.0
+#ENV NODE_ENV=production
+ENV PORT=8080
+ENV HOST=0.0.0.0
 
 # Copy config file
 COPY ./medusa-config.js ./

@@ -1,11 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build admin backend
-on:
-  push:
-    branches:
-      - master
+name: Build and deploy Node.js app to Azure Web App - med-shop-back
+
+#on:
+#  push:
+#    branches:
+#      - master
   workflow_dispatch:
 
 jobs:
@@ -34,24 +35,31 @@ jobs:
       - name: Copy node_modules
         run: cp -r ./my-h-bees/node_modules ./my-h-bees/.medusa
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./my-h-bees/.medusa -r
+      - name: Copy public admin app
+        run: cp -r ./my-h-bees/.medusa/server/public ./dist
+
+      - name: Copy medusa files
+        run: cp -r ./my-h-bees/.medusa ./dist
+
+      - name: Copy node package dir
+        run: cp -r ./my-h-bees/node_modules ./dist
+
+      
+      - name: Copy config into root
+        run: cp ./my-h-bees/medusa-config.js ./dist
+
+      - name: Copy package json
+        run: cp ./my-h-bees/package.json ./dist
+
+
         
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: release.zip
+          path: ./dist
 
-      - name: Upload medusa admin
-        uses: actions/upload-artifact@v4
-        with:
-           name: admin
-           path: |
-             ./my-h-bees/.medusa
-             ./my-h-bees/node_modules
-             ./my-h-bees/medusa-config.js
 
   deploy:
     runs-on: ubuntu-latest
@@ -69,8 +77,8 @@ jobs:
         with:
           name: admin
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
+#      - name: Unzip artifact for deployment
+#        run: unzip release.zip
       
       - name: Login to Azure
         uses: azure/login@v2
