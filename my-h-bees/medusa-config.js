@@ -24,7 +24,10 @@ module.exports = defineConfig({
       authCors: process.env.AUTH_CORS || 'http://localhost:5173,http://localhost:9000,http://localhost:8000,https://docs.medusajs.com',
       jwtSecret: process.env.JWT_SECRET || "supersecret",
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
-    }
+    },
+    workerMode:'shared',
+    redisUrl: process.env.REDIS_URL || '',
+
   },
   plugins: [
    
