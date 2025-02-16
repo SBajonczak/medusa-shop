@@ -6,16 +6,18 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd());
 
 module.exports = defineConfig({
   admin: {
-    disable: false
+    disable: false,
+    vite: config => {
+      config.server.allowedHosts = ['YOUR-DOMAIN']
+      return config
+    }
   },
   projectConfig: {
-
-
     projectConfig: {
       databaseDriverOptions: { connection: { ssl: { rejectUnauthorized: false } } }
     },
 
-    databaseUrl: process.env.DATABASE_URL || "postgres://postgres:supersecret@172.17.0.2/medusa-my-h-bees1",
+    databaseUrl: process.env.DATABASE_URL || "postgres://postgres:supersecret@172.17.0.2/postgres?sslmode=require",
     http: {
       storeCors: process.env.STORE_CORS || 'http://localhost:8000,https://docs.medusajs.com',
       adminCors: process.env.ADMIN_CORS || 'http://localhost:5173,http://localhost:9000,https://docs.medusajs.com',

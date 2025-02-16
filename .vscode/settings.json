@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/87a0e5a4-ee53-4323-b30a-5eee023c6b11/resourceGroups/imkern/providers/Microsoft.Web/sites/med-back-sba",
+    "appService.deploySubpath": "Test"
+}

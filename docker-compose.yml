@@ -15,27 +15,40 @@ services:
   #     POSTGRES_DB: yourdatabase
   backend:
     container_name: backend
-    image: beejay/my-medusa-backend:latest
+    image: docker.io/beejay/my-medusa-backend:latest
 #my-medusa-backend:latest
     restart: always
     network_mode: bridge
 #    build: ./my-h-bees
     # volumes:
     #   - ./my-h-bees:/app
-    environment:
-      - DATABASE_URL=postgres://postgres:supersecret@172.17.0.2/medusa-my-h-bees1
+    environment:    
+      - DATABASE_URL=postgres://pgbajonczak:n4@NMvumg-dTNop@postgrbajonczak.postgres.database.azure.com/postgres?sslmode=require
+      - MEDUSA_ADMIN_ONBOARDING_TYPE=nextjs
+      - STORE_CORS=http://localhost:8000,https://docs.medusajs.com,http://shop.myhealthybees.com
+      - ADMIN_CORS=http://localhost:5173,http://localhost:8080,https://docs.medusajs.com,http://shop.myhealthybees.com
+      - AUTH_CORS=http://localhost:5173,http://localhost:8080,http://shop.myhealthybees.com,http://localhost:8000,https://docs.medusajs.com
+      - REDIS_URL=redis://localhost:6379
+      - JWT_SECRET=supersecret
+      - COOKIE_SECRET=supersecret
+      - MEDUSA_BACKEND_URL= http://shop.myhealthybees.com
+      - MEDUSA_ADMIN_ONBOARDING_NEXTJS_DIRECTORY=my-h-bees-storefront
+      - DB_NAME=medusa-my-h-bees
     ports:
-      - "9000:9000"
-  store:
-    container_name: frontend
-    image: my-medusa-frontend:latest
-    restart: always
-    network_mode: bridge
-    environment:
-      - MEDUSA_BACKEND_URL=http://backend:9000
-      - BACKEND_URL=http://localhost:9000
-#    build: ./my-h-bees
-    # volumes:
-    #   - ./my-h-bees-storefront:/app
-    ports:
-      - "8000:8000"
+      - "8080:9000"
+
+#   store:
+#     container_name: frontend
+#     image: my-medusa-frontend:latest
+#     restart: always
+#     network_mode: bridge
+#     environment:
+#       - NEXT_PUBLIC_MEDUSA_BACKEND_URL=http://127.0.0.1:9000
+#       - NEXT_PUBLIC_BASE_URL=http://127.0.0.1:8000     
+#       - MEDUSA_BACKEND_URL=http://backend:9000
+#       - BACKEND_URL=http://localhost:9000
+# #    build: ./my-h-bees
+#     # volumes:
+#     #   - ./my-h-bees-storefront:/app
+#     ports:
+#       - "8000:8000"

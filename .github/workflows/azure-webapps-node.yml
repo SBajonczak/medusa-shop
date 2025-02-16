@@ -1,85 +1,89 @@
-# This workflow will build and push a node.js application to an Azure Web App when a commit is pushed to your default branch.
-#
-# This workflow assumes you have already created the target Azure App Service web app.
-# For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-nodejs?tabs=linux&pivots=development-environment-cli
-#
-# To configure this workflow:
-#
-# 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
-#    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
-#
-# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
-#    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
-#
-# 3. Change the value for the AZURE_WEBAPP_NAME. Optionally, change the AZURE_WEBAPP_PACKAGE_PATH and NODE_VERSION environment variables below.
-#
-# For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
-# For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
+name: Build admin backend
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - master
   workflow_dispatch:
-
-env:
-  AZURE_WEBAPP_NAME: med-shop-back   # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '20.x'                # set this to the node version to use
-
-permissions:
-  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
+    permissions:
+      contents: read #This is required for actions/checkout
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-#      with:
-#        node-version: ${{ env.NODE_VERSION }}
-#        cache: 'npm'
+    steps:
+      - uses: actions/checkout@v4
+  
+      - name: Set up Node.js version
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: npm install, build, and test
+        working-directory: my-h-bees-storefront
+        run: |
+          npm install
+          npm run build --if-present
+
+      - name: Copy config
+        run: cp ./my-h-bees/medusa-config.js ./my-h-bees/.medusa
+
+      - name: Copy node_modules
+        run: cp -r ./my-h-bees/node_modules ./my-h-bees/.medusa
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./my-h-bees/.medusa -r
         
 
-    - name: Build Backend
-      working-directory: my-h-bees
-      run: |
-        npm install
-        npm run build --if-present
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-app
+          path: release.zip
 
-    - name: Upload medusa admin
-      uses: actions/upload-artifact@v4
-      with:
-        name: admin
-        path: |
-          ./my-h-bees/.medusa
-          ./my-h-bees/node_modules
-          ./my-h-bees/medusa-config.js
-
-
-
+      - name: Upload medusa admin
+        uses: actions/upload-artifact@v4
+        with:
+           name: admin
+           path: |
+             ./my-h-bees/.medusa
+             ./my-h-bees/node_modules
+             ./my-h-bees/medusa-config.js
 
   deploy:
-    permissions:
-      contents: none
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Development'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v4
-      with:
-        name: admin
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: admin
 
-    - name: 'Deploy to Azure WebApp'
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_981BC7E2EDB14A1C8D83AD3EDBBD030D }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B5D8E30AFBB246DCA7B2E7C00520AE39 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9490B1775E5C4D77B6208A27432E72FC }}
+
+      # - name: 'Deploy to Azure Web App'
+      #   id: deploy-to-webapp
+      #   uses: azure/webapps-deploy@v3
+      #   with:
+      #     app-name: 'med-shop-back'
+      #     slot-name: 'Production'
+      #     package: .
+          
