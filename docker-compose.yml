@@ -15,7 +15,7 @@ services:
   #     POSTGRES_DB: yourdatabase
   backend:
     container_name: backend
-    image: docker.io/beejay/my-medusa-backend:latest
+    image: docker.io/beejay/my-h-bees:latest
 #my-medusa-backend:latest
     restart: always
     network_mode: bridge
@@ -29,7 +29,7 @@ services:
       - STORE_CORS=http://localhost:8000,https://docs.medusajs.com,http://shop.myhealthybees.com
       - ADMIN_CORS=http://localhost:5173,http://localhost:8080,https://docs.medusajs.com,http://shop.myhealthybees.com
       - AUTH_CORS=http://localhost:5173,http://localhost:8080,http://shop.myhealthybees.com,http://localhost:8000,https://docs.medusajs.com
-      - REDIS_URL=redis://localhost:6379
+      - REDIS_URL=redis://redis:6379
       - JWT_SECRET=supersecret
       - COOKIE_SECRET=supersecret
       - MEDUSA_BACKEND_URL= http://shop.myhealthybees.com
@@ -37,7 +37,15 @@ services:
       - DB_NAME=medusa-my-h-bees
     ports:
       - "8080:9000"
-
+    depends_on:
+      - redis
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    network_mode: bridge
+    ports:
+      - "6379:6379"
 #   store:
 #     container_name: frontend
 #     image: my-medusa-frontend:latest
