@@ -41,12 +41,12 @@ COPY ./medusa-config.js ./
 #COPY --from=builder /usr/src/app/package.json ./package.json
 #COPY ./instrumentation.ts .
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/.medusa/server/public .
+#COPY --from=builder /usr/src/app/.medusa/server/public .
 COPY --from=builder /usr/src/app/.medusa .
 COPY  ./medusa-config.js .
 COPY  ./package.json .
 
-
+RUN ln -s ./.medusa/server/public /public
 # Run application
 EXPOSE 9000
 CMD ["npm", "run", "start"]
