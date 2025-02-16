@@ -51,7 +51,6 @@ COPY --from=builder /usr/src/app .
 COPY  ./medusa-config.js .
 COPY  ./package.json .
 
-RUN rm .env
 
 RUN ln -s ./.medusa/server/public public
 # Run application
