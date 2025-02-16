@@ -10,8 +10,11 @@ COPY . .
 # Build the Next.js application 
 RUN npm i 
 # Build the Next.js application 
-# RUn npm run build
+ RUN npm run build
+
 # Expose the port the app runs on 
-EXPOSE 8000 
+EXPOSE 8080
+EXPOSE 80
+EXPOSE 443
 # Start the application 
-CMD ["npm","run", "dev"] 
+CMD ["npm","run", "start"] 
